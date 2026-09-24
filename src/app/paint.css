@@ -1,6 +1,6 @@
 
 :root{--cream:#FBF5EE;--paper:#F5EADF;--rose:#EBCFCB;--dusty:#C99AA0;--sage:#A9B89B;--wine:#8A3F4E;--ink:#4A3338;--soft:#7A6167;
---script:'Pinyon Script','Snell Roundhand',cursive;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',system-ui,sans-serif;
+--script:var(--font-script),'Snell Roundhand',cursive;--serif:var(--font-serif),Georgia,serif;--sans:var(--font-sans),system-ui,sans-serif;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0}
 html{scroll-padding-top:70px;scroll-behavior:smooth}
@@ -144,4 +144,3 @@ button.btn{cursor:pointer;font-family:inherit}
 .ph img,.pola i img{object-fit:cover}
 .pola i{position:relative}
 .card .btn[aria-disabled=true]{opacity:.55;pointer-events:none}
-

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Workshops from "@/components/Workshops";
 import PrivateForm from "@/components/PrivateForm";
+import GalleryPolas from "@/components/GalleryPolas";
 import { supabase } from "@/lib/supabase";
 import type { Contact, GalleryItem, Workshop } from "@/lib/types";
 
@@ -14,7 +15,7 @@ const FALLBACK_CONTACT: Contact = {
 export default async function Home() {
   const [w, g, s] = await Promise.all([
     supabase.from("workshops_availability").select("*").gte("starts_at", new Date().toISOString()).order("starts_at"),
-    supabase.from("gallery_items").select("id,image_url,caption,orientation").eq("published", true).order("sort_order").limit(8),
+    supabase.from("gallery_items").select("id,media_url,media_type,caption,orientation").eq("published", true).order("sort_order").limit(8),
     supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle(),
   ]);
   const workshops = (w.data ?? []) as Workshop[];
@@ -77,23 +78,7 @@ export default async function Home() {
 
         <section className="galerie" id="galerie"><div className="wrap">
           <div className="head"><h2>Dans l&apos;atelier</h2></div>
-          <div className="polas">
-            {gallery.length > 0
-              ? gallery.map((it) => {
-                  const land = it.orientation === "landscape";
-                  return (
-                    <div className="pola" key={it.id}>
-                      <i style={{ width: land ? 300 : 210, height: land ? 210 : 270 }}>
-                        <Image src={it.image_url} alt={it.caption ?? "Photo de l'atelier"} fill sizes="300px" />
-                      </i>
-                      {it.caption && <span>{it.caption}</span>}
-                    </div>
-                  );
-                })
-              : ["les toiles", "l'ambiance", "Paint Cam", "cocktails"].map((c) => (
-                  <div className="pola" key={c} aria-hidden="true"><i></i><span>{c}</span></div>
-                ))}
-          </div>
+          <GalleryPolas items={gallery} />
         </div></section>
 
         <section className="about" id="apropos"><div className="wrap">
