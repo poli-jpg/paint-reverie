@@ -89,6 +89,42 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
 .about{padding:88px 0;background:var(--paper);text-align:center}
 .about blockquote{font:500 italic clamp(24px,3.2vw,34px)/1.45 var(--serif);max-width:26em;margin:0 auto 18px}
 .about .script{font-size:44px;color:var(--wine)}
+/* contact */
+.contact{position:relative;overflow:hidden;padding:104px 0;background:linear-gradient(180deg,var(--cream) 0%,#F8EDE6 100%)}
+.contact-stroke{position:absolute;right:-60px;top:36px;width:560px;max-width:70%;opacity:.55;pointer-events:none}
+.contact-stroke path{fill:none;stroke:var(--rose);stroke-width:34;stroke-linecap:round}
+.contact .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.contact-intro .script{font-size:clamp(44px,5.5vw,60px);color:var(--wine);line-height:1.05;margin-bottom:6px}
+.contact-intro h2{margin-bottom:16px}
+.contact-intro p{color:var(--soft);margin-bottom:28px}
+.contact-cta{display:inline-flex;align-items:center;gap:10px;justify-content:center}
+.contact-facts{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-wrap:wrap;gap:10px}
+.contact-facts li{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--sage);background:rgba(169,184,155,.16);border-radius:999px;padding:7px 16px;font-size:14px}
+.contact-facts svg{width:17px;height:17px;color:#5d6e4f}
+.contact-card{background:#fff;border:1px solid rgba(201,154,160,.35);border-radius:22px;padding:14px;box-shadow:0 24px 50px -30px rgba(138,63,78,.45);transform:rotate(.6deg)}
+.contact-row{display:flex;align-items:center;gap:16px;padding:14px 14px;border-radius:14px;transition:background .2s}
+.contact-row + .contact-row{border-top:1px solid rgba(201,154,160,.22)}
+.contact-row:hover{background:var(--cream)}
+.contact-row:hover .contact-arrow{color:var(--wine);transform:translate(2px,-2px)}
+.contact-ico{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--rose);color:var(--wine)}
+.contact-row:first-child .contact-ico{background:var(--wine);color:var(--cream)}
+.contact-txt{flex:1;display:flex;flex-direction:column;min-width:0}
+.contact-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+.contact-value{font:500 20px/1.3 var(--serif);color:var(--ink);overflow-wrap:anywhere}
+.contact-arrow{color:var(--dusty);transition:transform .2s,color .2s}
+.contact-sign{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 14px 6px;margin-top:6px;border-top:1px dashed rgba(201,154,160,.5)}
+.contact-sign .script{font-size:34px;color:var(--wine);line-height:1}
+.contact-sign span:last-child{font-size:11px;letter-spacing:.28em;color:var(--dusty)}
+@media(max-width:860px){
+  .contact{padding:64px 0}
+  .contact .wrap{grid-template-columns:1fr;gap:36px}
+  .contact-card{transform:none}
+  .contact-stroke{top:10px;right:-120px;opacity:.4}
+  .contact-value{font-size:18px;overflow-wrap:normal}
+  .contact-row{gap:12px;padding:12px 8px}
+  .contact-ico{width:40px;height:40px}
+}
+
 /* footer */
 footer{padding:56px 0 40px;text-align:center}
 footer .logo{font-size:44px}

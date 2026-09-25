@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Workshops from "@/components/Workshops";
 import PrivateForm from "@/components/PrivateForm";
 import GalleryPolas from "@/components/GalleryPolas";
+import ContactSection from "@/components/ContactSection";
 import { supabase } from "@/lib/supabase";
 import type { Contact, GalleryItem, Workshop } from "@/lib/types";
 
@@ -85,9 +86,10 @@ export default async function Home() {
           <blockquote>« The Paint Reverie est née d&apos;une envie simple : créer un endroit où l&apos;on peut ralentir, créer quelque chose de ses propres mains et surtout passer un bon moment. »</blockquote>
           <div className="script">Fatima</div>
         </div></section>
+        <ContactSection contact={contact} />
       </main>
 
-      <footer id="contact"><div className="wrap">
+      <footer><div className="wrap">
         <div className="logo">The Paint Reverie</div>
         <div className="by" style={{ margin: "2px 0 10px" }}>by Fatima</div>
         <div className="sig" style={{ margin: 0 }}>PAINT ✦ CREATE ✦ DREAM</div>
