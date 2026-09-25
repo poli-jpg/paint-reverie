@@ -8,11 +8,12 @@ const fmtDate = (iso: string) =>
 const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Dakar" }).replace(":", "h");
 
-export default function Workshops({ workshops }: { workshops: Workshop[] }) {
+export default function Workshops({ workshops, whatsapp }: { workshops: Workshop[]; whatsapp: string }) {
   const dlg = useRef<HTMLDialogElement>(null);
   const [sel, setSel] = useState<Workshop | null>(null);
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
   const [error, setError] = useState("");
+  const [waUrl, setWaUrl] = useState("");
 
   function openBooking(w: Workshop) {
     setSel(w); setState("idle"); setError(""); dlg.current?.showModal();
@@ -32,6 +33,17 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
         }),
       });
       if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Erreur");
+      const seats = Number(f.seats) || 1;
+      const msg = [
+        "Bonjour Fatima, je viens de réserver sur le site 🎨",
+        `Atelier : ${sel.title}`,
+        `Date : ${fmtDate(sel.starts_at)} à ${fmtTime(sel.starts_at)}`,
+        `Nom : ${f.firstName} ${f.lastName}`,
+        `Places : ${seats}`,
+        `Acompte : ${(DEPOSIT_FCFA * seats).toLocaleString("fr-FR")} FCFA`,
+        "Je souhaite confirmer ma réservation.",
+      ].join("\n");
+      setWaUrl(`https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`);
       setState("done");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur"); setState("idle");
@@ -105,6 +117,11 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
             <div className="ok show" role="status">
               <div className="script">C&apos;est noté !</div>
               <p style={{ margin: "0 auto" }}>Votre réservation a bien été prise en compte. Fatima vous contactera sur WhatsApp pour le paiement de l&apos;acompte ({DEPOSIT_FCFA.toLocaleString("fr-FR")} FCFA par place), qui confirme votre place.</p>
+              {waUrl && (
+                <a className="btn fill" href={waUrl} target="_blank" rel="noopener noreferrer" style={{ marginTop: 18 }}>
+                  Confirmer via WhatsApp
+                </a>
+              )}
             </div>
           )}
         </div>

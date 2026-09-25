@@ -7,7 +7,7 @@ export type GalleryItem = {
   id: string; media_url: string; media_type: "image" | "video";
   caption: string | null; orientation: "portrait" | "landscape";
 };
-export type Contact = { whatsapp: string; instagram: string; tiktok: string; snapchat: string };
+export type Contact = { whatsapp: string; email: string; instagram: string; tiktok: string; snapchat: string };
 
 // Acompte demandé par place pour valider une réservation (FCFA).
 export const DEPOSIT_FCFA = 7000;

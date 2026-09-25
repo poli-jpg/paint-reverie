@@ -9,7 +9,7 @@ import type { Contact, GalleryItem, Workshop } from "@/lib/types";
 export const revalidate = 60; // les ateliers et places restantes se rafraîchissent chaque minute
 
 const FALLBACK_CONTACT: Contact = {
-  whatsapp: "+221763966507", instagram: "thepaintreverie_", tiktok: "thepaintreverie_", snapchat: "paintreverie",
+  whatsapp: "+221763966507", email: "thepaintreverie@gmail.com", instagram: "thepaintreverie_", tiktok: "thepaintreverie_", snapchat: "paintreverie",
 };
 
 export default async function Home() {
@@ -56,7 +56,7 @@ export default async function Home() {
 
         <section className="ateliers" id="ateliers"><div className="wrap">
           <div className="head"><h2>Nos prochains ateliers</h2><p>Réservez votre place en ligne.</p></div>
-          <Workshops workshops={workshops} />
+          <Workshops workshops={workshops} whatsapp={contact.whatsapp} />
         </div></section>
 
         <section className="prive" id="prives"><div className="wrap">
@@ -101,7 +101,10 @@ export default async function Home() {
           <a href={`https://tiktok.com/@${contact.tiktok}`}>TikTok</a>
           <a href={`https://www.snapchat.com/add/${contact.snapchat}`}>Snapchat</a>
         </div>
-        <div className="wa">{contact.whatsapp.replace(/(\+\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5")}</div>
+        <div className="wa">
+          <a href={`https://wa.me/${waDigits}`}>{contact.whatsapp.replace(/(\+\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5")}</a>
+          <br /><a href={`mailto:${contact.email}`}>{contact.email}</a>
+        </div>
       </div></footer>
     </>
   );
