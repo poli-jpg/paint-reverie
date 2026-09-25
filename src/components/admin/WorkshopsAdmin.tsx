@@ -88,8 +88,8 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
             <h2>{editId ? "Modifier l'atelier" : "Nouvel atelier"}</h2>
             <div className="fld"><label>Titre</label>
               <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></div>
-            <div className="fld"><label>Identifiant (slug)</label>
-              <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="fleurs-en-pastel" required /></div>
+            <div className="fld"><label>Identifiant (facultatif)</label>
+              <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="créé à partir du titre" /></div>
             <div className="fld"><label>Date et heure</label>
               <input type="datetime-local" value={form.startsAt} onChange={(e) => setForm({ ...form, startsAt: e.target.value })} required /></div>
             <div className="fld"><label>Lieu</label>
@@ -98,7 +98,7 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
               <input type="number" min={0} value={form.priceFcfa} onChange={(e) => setForm({ ...form, priceFcfa: e.target.value })} required /></div>
             <div className="fld"><label>Capacité</label>
               <input type="number" min={1} value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} required /></div>
-            <div className="fld full"><label>Photo (lien Supabase, facultatif)</label>
+            <div className="fld full"><label>Photo (lien d&apos;image, facultatif)</label>
               <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} /></div>
             <div className="fld full"><label>Description (facultatif)</label>
               <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>

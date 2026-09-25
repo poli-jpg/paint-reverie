@@ -30,14 +30,14 @@ export const privateRequestSchema = z.object({
 });
 
 export const workshopSchema = z.object({
-  slug: z.string().trim().min(1).max(80).regex(/^[a-z0-9-]+$/, "Lettres minuscules, chiffres et tirets uniquement"),
+  slug: z.string().trim().max(80).optional().default(""), // nettoyé/généré automatiquement côté serveur
   title: z.string().trim().min(1).max(120),
   description: z.string().trim().max(2000).optional().default(""),
   startsAt: z.string().min(1),
   location: z.string().trim().min(1).max(200),
   priceFcfa: z.coerce.number().int().min(0),
   capacity: z.coerce.number().int().min(1).max(500),
-  imageUrl: z.string().trim().max(500).optional().default(""),
+  imageUrl: z.string().trim().max(1000).optional().default(""),
   status: z.enum(["draft", "open", "closed"]),
 });
 
@@ -57,3 +57,20 @@ export const galleryCreateSchema = z.object({
 });
 
 export const galleryUpdateSchema = z.object({ published: z.boolean() });
+
+// "Fleurs en Pastel !" -> "fleurs-en-pastel"
+export function slugify(s: string) {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80) || "atelier";
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  title: "Titre", slug: "Identifiant", startsAt: "Date et heure", location: "Lieu",
+  priceFcfa: "Prix", capacity: "Capacité", imageUrl: "Photo", description: "Description", status: "Statut",
+};
+
+// Message lisible indiquant quels champs posent problème.
+export function fieldErrors(error: z.ZodError) {
+  const fields = [...new Set(error.issues.map((i) => FIELD_LABELS[String(i.path[0])] ?? String(i.path[0])))];
+  return `Vérifie ce(s) champ(s) : ${fields.join(", ")}.`;
+}

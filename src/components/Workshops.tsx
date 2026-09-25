@@ -47,7 +47,8 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
             <article className="card" key={w.id}>
               <div className="ph">
                 {w.image_url
-                  ? <Image src={w.image_url} alt={w.title} fill sizes="(max-width:860px) 100vw, 360px" />
+                  ? <Image src={w.image_url} alt={w.title} fill sizes="(max-width:860px) 100vw, 360px"
+                      unoptimized={!w.image_url.includes(".supabase.co/")} style={{ objectFit: "cover" }} />
                   : "Photo de l'atelier"}
               </div>
               <div className="in">
