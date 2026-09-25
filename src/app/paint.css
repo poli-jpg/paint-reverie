@@ -169,6 +169,24 @@ button.btn{cursor:pointer;font-family:inherit}
 .badge-open,.badge-confirmed{background:rgba(169,184,155,.28);color:#3f5030}
 .badge-closed,.badge-cancelled{background:rgba(138,63,78,.14);color:var(--wine)}
 .badge-draft,.badge-pending{background:rgba(201,154,160,.3);color:var(--wine)}
+.badge-new{background:var(--wine);color:#fff}
+.badge-contacted,.badge-quoted{background:rgba(201,154,160,.3);color:var(--wine)}
+.badge-done{background:rgba(169,184,155,.28);color:#3f5030}
+.badge-declined{background:rgba(74,51,56,.1);color:var(--soft)}
+.req-list{display:grid;gap:18px;margin-top:8px}
+.req-card{background:#fff;border:1px solid rgba(201,154,160,.35);padding:20px 22px;display:grid;gap:14px}
+.req-new{border-left:4px solid var(--wine)}
+.req-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.req-head h2{font:500 22px var(--serif);color:var(--ink)}
+.req-date{display:block;margin:2px 0 0}
+.req-info{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px 18px;font-size:15px}
+.req-info dt{color:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.req-info dd{margin:2px 0 0;word-break:break-word}
+.req-message{white-space:pre-wrap;background:var(--cream);padding:12px 14px;font-size:15px;line-height:1.55}
+.req-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.req-actions .btn{padding:9px 16px;font-size:14px;min-height:auto}
+.req-status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:14px;color:var(--soft)}
+.req-status select{padding:7px 10px;border:1px solid rgba(201,154,160,.6);background:#fff;font:inherit;color:var(--ink)}
 .btn.danger{border-color:#8A3F4E;color:#8A3F4E}
 .btn.danger:hover{background:#8A3F4E;color:#fff}
 .admin-modal{position:fixed;inset:0;background:rgba(74,51,56,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50;overflow:auto}

@@ -41,6 +41,10 @@ export const workshopSchema = z.object({
   status: z.enum(["draft", "open", "closed"]),
 });
 
+export const requestStatusSchema = z.object({
+  status: z.enum(["new", "contacted", "quoted", "done", "declined"]),
+});
+
 export const bookingStatusSchema = z.object({ status: z.enum(["pending", "confirmed", "cancelled"]) });
 
 export const galleryCreateSchema = z.object({
