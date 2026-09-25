@@ -28,3 +28,28 @@ export const privateRequestSchema = z.object({
   message: z.string().trim().max(2000).optional().default(""),
   website: z.string().max(0).optional(),
 });
+
+export const workshopSchema = z.object({
+  slug: z.string().trim().min(1).max(80).regex(/^[a-z0-9-]+$/, "Lettres minuscules, chiffres et tirets uniquement"),
+  title: z.string().trim().min(1).max(120),
+  description: z.string().trim().max(2000).optional().default(""),
+  startsAt: z.string().min(1),
+  location: z.string().trim().min(1).max(200),
+  priceFcfa: z.coerce.number().int().min(0),
+  capacity: z.coerce.number().int().min(1).max(500),
+  imageUrl: z.string().trim().max(500).optional().default(""),
+  status: z.enum(["draft", "open", "closed"]),
+});
+
+export const bookingStatusSchema = z.object({ status: z.enum(["pending", "confirmed", "cancelled"]) });
+
+export const galleryCreateSchema = z.object({
+  mediaUrl: z.string().trim().url(),
+  mediaType: z.enum(["image", "video"]),
+  caption: z.string().trim().max(200).optional().default(""),
+  category: z.string().trim().max(60).optional().default(""),
+  orientation: z.enum(["portrait", "landscape"]),
+  sortOrder: z.coerce.number().int().default(0),
+});
+
+export const galleryUpdateSchema = z.object({ published: z.boolean() });

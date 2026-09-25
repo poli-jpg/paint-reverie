@@ -4,7 +4,7 @@ import "./paint.css";
 
 export const metadata: Metadata = {
   title: "The Paint Reverie by Fatima",
-  description: "Atelier de peinture cr\u00e9atif et mobile au S\u00e9n\u00e9gal. R\u00e9servez votre place ou organisez votre atelier priv\u00e9.",
+  description: "Atelier de peinture créatif et mobile au Sénégal. Réservez votre place ou organisez votre atelier privé.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
