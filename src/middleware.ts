@@ -24,6 +24,9 @@ export async function middleware(req: NextRequest) {
   const isLoginPage = req.nextUrl.pathname === "/admin/login";
   const isAdmin = !!user && user.email === process.env.ADMIN_EMAIL;
 
+  if (!isLoginPage && !isAdmin) {
+    console.log(`[admin] accès refusé à ${req.nextUrl.pathname} — connecté: ${user?.email ?? "personne"} / ADMIN_EMAIL: ${process.env.ADMIN_EMAIL}`);
+  }
   if (req.nextUrl.pathname.startsWith("/admin") && !isLoginPage && !isAdmin) {
     const url = req.nextUrl.clone();
     url.pathname = "/admin/login";

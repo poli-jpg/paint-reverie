@@ -16,7 +16,11 @@ const shell = (body: string) => `
 
 // Les e-mails ne doivent jamais faire échouer une réservation : on log et on continue.
 async function safeSend(opts: Parameters<typeof resend.emails.send>[0]) {
-  try { await resend.emails.send(opts); } catch (e) { console.error("Email error", e); }
+  try {
+    const { data, error } = await resend.emails.send(opts);
+    if (error) console.error(`[email] ÉCHEC vers ${opts.to} :`, error.message);
+    else console.log(`[email] envoyé vers ${opts.to} (id ${data?.id})`);
+  } catch (e) { console.error("[email] erreur", e); }
 }
 
 export async function sendBookingEmails(b: {

@@ -1,10 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 
 export default function AdminLogin() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,9 +13,13 @@ export default function AdminLogin() {
     setLoading(true); setError("");
     const { error } = await supabaseBrowser.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) { setError("E-mail ou mot de passe incorrect."); return; }
-    router.replace("/admin/workshops");
-    router.refresh();
+    if (error) {
+      console.error("[login] Supabase:", error);
+      setError(`Connexion refusée : ${error.message}`);
+      return;
+    }
+    // Navigation complète pour que le middleware reçoive bien les cookies de session.
+    window.location.href = "/admin/workshops";
   }
 
   return (
@@ -28,7 +30,7 @@ export default function AdminLogin() {
         <div className="fld"><label htmlFor="email">E-mail</label>
           <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus /></div>
         <div className="fld"><label htmlFor="pw">Mot de passe</label>
-          <input id="pw" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
+          <input id="pw" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
         {error && <div className="err" role="alert">{error}</div>}
         <button className="btn fill" type="submit" disabled={loading} style={{ width: "100%" }}>
           {loading ? "Connexion…" : "Se connecter"}
