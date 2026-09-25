@@ -32,7 +32,7 @@ export default async function Home() {
             <h1>The Paint Reverie</h1>
             <div className="by">by Fatima</div>
             <div className="sig">PAINT ✦ CREATE ✦ DREAM</div>
-            <p className="lead">Une toile, des couleurs, de la musique et les gens que vous aimez. Venez peindre, on s&apos;occupe du reste.</p>
+            <p className="lead">Une toile, des couleurs et les gens que vous aimez. Venez peindre, on s&apos;occupe du reste.</p>
             <div className="ctas">
               <a className="btn fill" href="#ateliers">Découvrir les ateliers</a>
               <a className="btn line" href="#prives">Organiser un atelier privé</a>
@@ -49,7 +49,7 @@ export default async function Home() {
           <div className="script">Le concept</div>
           <div>
             <p>The Paint Reverie, c&apos;est un atelier de peinture pensé pour créer, partager et simplement passer un bon moment.</p>
-            <p>Une toile, quelques couleurs, de la musique, de bonnes vibes et des souvenirs à créer. Pas besoin d&apos;être artiste : on vient profiter, et on repart avec sa propre création.</p>
+            <p>Une toile, quelques couleurs, de bonnes vibes et des souvenirs à créer. Pas besoin d&apos;être artiste : on vient profiter, et on repart avec sa propre création.</p>
             <div className="list"><span className="chip">Matériel fourni</span><span className="chip">Cocktail sur place</span><span className="chip">Séance photo Paint Cam</span><span className="chip">Repartez avec votre toile</span></div>
           </div>
         </div></section>

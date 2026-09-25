@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import type { Workshop } from "@/lib/types";
+import { DEPOSIT_FCFA, type Workshop } from "@/lib/types";
 
 const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Dakar" });
@@ -56,6 +56,7 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
                 <div className="meta">{fmtDate(w.starts_at)} · {fmtTime(w.starts_at)}</div>
                 <div className="meta">{w.location}</div>
                 <div className="price">{w.price_fcfa.toLocaleString("fr-FR")} FCFA</div>
+                <div className="meta">Acompte de {DEPOSIT_FCFA.toLocaleString("fr-FR")} FCFA par place pour réserver</div>
                 <div className="left">
                   {w.status === "closed" ? "Réservations fermées" : w.seats_left === 0 ? "Complet" : `${w.seats_left} place${w.seats_left > 1 ? "s" : ""} restante${w.seats_left > 1 ? "s" : ""}`}
                 </div>
@@ -91,6 +92,10 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
                   </select></div>
                 <div className="fld full"><label htmlFor="b-msg">Informations supplémentaires (facultatif)</label><textarea id="b-msg" name="notes" /></div>
                 <input className="hp" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+                <p className="fld full meta" style={{ margin: 0 }}>
+                  Un acompte de {DEPOSIT_FCFA.toLocaleString("fr-FR")} FCFA par place est demandé pour valider la réservation.
+                  Fatima vous contacte sur WhatsApp pour le paiement.
+                </p>
                 {error && <div className="err" role="alert">{error}</div>}
                 <button className="btn fill" type="submit" disabled={state === "sending"}>{state === "sending" ? "Envoi…" : "Réserver"}</button>
               </form>
@@ -99,7 +104,7 @@ export default function Workshops({ workshops }: { workshops: Workshop[] }) {
           {state === "done" && (
             <div className="ok show" role="status">
               <div className="script">C&apos;est noté !</div>
-              <p style={{ margin: "0 auto" }}>Ta place est réservée. Un e-mail de confirmation t&apos;est envoyé, et Fatima t&apos;écrit sur WhatsApp pour le paiement.</p>
+              <p style={{ margin: "0 auto" }}>Votre réservation a bien été prise en compte. Fatima vous contactera sur WhatsApp pour le paiement de l&apos;acompte ({DEPOSIT_FCFA.toLocaleString("fr-FR")} FCFA par place), qui confirme votre place.</p>
             </div>
           )}
         </div>

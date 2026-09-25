@@ -8,3 +8,6 @@ export type GalleryItem = {
   caption: string | null; orientation: "portrait" | "landscape";
 };
 export type Contact = { whatsapp: string; instagram: string; tiktok: string; snapchat: string };
+
+// Acompte demandé par place pour valider une réservation (FCFA).
+export const DEPOSIT_FCFA = 7000;

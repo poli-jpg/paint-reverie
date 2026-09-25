@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { DEPOSIT_FCFA } from "@/lib/types";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.EMAIL_FROM!;
@@ -39,7 +40,7 @@ export async function sendBookingEmails(b: {
         <p>Coucou ${esc(b.firstName)},</p>
         <p>Ta réservation est bien enregistrée pour <b>${esc(b.title)}</b>.</p>
         <p>${esc(date)}<br>${esc(b.location)}<br>${b.seats} place(s), soit ${total} FCFA</p>
-        <p>Fatima t'écrit sur WhatsApp pour le paiement. Ta place est confirmée une fois celui-ci reçu.</p>`),
+        <p>Fatima t'écrit sur WhatsApp pour le paiement de l'acompte (${(DEPOSIT_FCFA * b.seats).toLocaleString("fr-FR")} FCFA). Ta place est confirmée une fois celui-ci reçu.</p>`),
     }),
     safeSend({
       from: FROM, to: NOTIFY,
