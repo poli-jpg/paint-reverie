@@ -186,6 +186,17 @@ button.btn{cursor:pointer;font-family:inherit}
 .req-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .req-actions .btn{padding:9px 16px;font-size:14px;min-height:auto}
 .req-status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:14px;color:var(--soft)}
+@media(max-width:700px){
+  .admin-main{padding:24px 14px 48px}
+  .admin-header-in{padding:0 14px;gap:12px}
+  .admin-page-head h1{font-size:24px}
+  .req-card{padding:16px}
+  .req-head{flex-direction:column;gap:6px}
+  .req-info{grid-template-columns:1fr 1fr}
+  .req-actions .btn{flex:1 1 100%;text-align:center;justify-content:center}
+  .req-status{margin-left:0;width:100%}
+  .req-status select{flex:1}
+}
 .req-status select{padding:7px 10px;border:1px solid rgba(201,154,160,.6);background:#fff;font:inherit;color:var(--ink)}
 .btn.danger{border-color:#8A3F4E;color:#8A3F4E}
 .btn.danger:hover{background:#8A3F4E;color:#fff}

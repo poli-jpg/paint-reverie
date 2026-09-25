@@ -74,13 +74,13 @@ export default function RequestsAdmin({ initial }: { initial: R[] }) {
       <div className="req-list">
         {shown.map((r) => (
           <article key={r.id} className={`req-card${r.status === "new" ? " req-new" : ""}`}>
-            <header className="req-head">
+            <div className="req-head">
               <div>
                 <h2>{r.first_name} {r.last_name}</h2>
                 <span className="admin-muted req-date">Reçue le {fmtDate(r.created_at)}</span>
               </div>
               <span className={`badge badge-${r.status}`}>{STATUS_LABELS[r.status]}</span>
-            </header>
+            </div>
 
             <dl className="req-info">
               <div><dt>Type</dt><dd>{r.event_type}</dd></div>
@@ -93,7 +93,7 @@ export default function RequestsAdmin({ initial }: { initial: R[] }) {
 
             <p className="req-message">{r.message || <span className="admin-muted">Pas de message.</span>}</p>
 
-            <footer className="req-actions">
+            <div className="req-actions">
               <a className="btn fill" href={waLink(r.phone, r.first_name)} target="_blank" rel="noopener noreferrer"
                  onClick={() => r.status === "new" && setStatus(r.id, "contacted")}>
                 Répondre sur WhatsApp
@@ -109,7 +109,7 @@ export default function RequestsAdmin({ initial }: { initial: R[] }) {
                   ))}
                 </select>
               </label>
-            </footer>
+            </div>
           </article>
         ))}
         {shown.length === 0 && (
