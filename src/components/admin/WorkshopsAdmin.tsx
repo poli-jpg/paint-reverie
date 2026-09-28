@@ -1,5 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { supabaseBrowser } from "@/lib/supabase-browser";
+
+// Envoie une image directement vers Supabase (bucket "photos") et renvoie son lien public.
+async function uploadImage(file: File): Promise<string> {
+  if (!file.type.startsWith("image/")) throw new Error("Choisis une photo (JPG, PNG ou WEBP).");
+  if (file.size > 20 * 1024 * 1024) throw new Error("Photo trop lourde (max 20 Mo).");
+  const r = await fetch("/api/admin/gallery/upload-url", {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ fileName: file.name, contentType: file.type }),
+  });
+  const sign = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(sign.error || "Envoi refusé");
+  const { error } = await supabaseBrowser.storage.from("photos")
+    .uploadToSignedUrl(sign.path, sign.token, file, { contentType: file.type });
+  if (error) throw new Error(error.message);
+  return sign.publicUrl as string;
+}
 
 type W = {
   id: string; slug: string; title: string; description: string | null; starts_at: string;
@@ -24,6 +41,20 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
   const [editId, setEditId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const photoInput = useRef<HTMLInputElement>(null);
+
+  async function handlePhoto(file?: File) {
+    if (!file || !form) return;
+    setUploading(true); setError("");
+    try {
+      const url = await uploadImage(file);
+      setForm((f) => (f ? { ...f, imageUrl: url } : f));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erreur d'envoi");
+    }
+    setUploading(false);
+  }
 
   function openCreate() { setForm({ ...empty }); setEditId(null); setError(""); }
   function openEdit(w: W) {
@@ -98,8 +129,29 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
               <input type="number" min={0} value={form.priceFcfa} onChange={(e) => setForm({ ...form, priceFcfa: e.target.value })} required /></div>
             <div className="fld"><label>Capacité</label>
               <input type="number" min={1} value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} required /></div>
-            <div className="fld full"><label>Photo (lien d&apos;image, facultatif)</label>
-              <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} /></div>
+            <div className="fld full"><label>Photo de l&apos;atelier (facultatif)</label>
+              <input ref={photoInput} type="file" accept="image/jpeg,image/png,image/webp" hidden
+                onChange={(e) => { handlePhoto(e.target.files?.[0]); e.target.value = ""; }} />
+              <div className={`ws-drop${form.imageUrl ? " has-img" : ""}`}
+                onClick={() => !uploading && photoInput.current?.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => { e.preventDefault(); handlePhoto(e.dataTransfer.files?.[0]); }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {form.imageUrl && <img src={form.imageUrl} alt="" />}
+                <span>
+                  {uploading ? "Envoi de la photo…"
+                    : form.imageUrl ? "Glisse une autre photo ou clique pour la changer"
+                    : "Glisse une photo ici ou clique pour la choisir"}
+                </span>
+              </div>
+              <div className="ws-photo-row">
+                <input value={form.imageUrl} placeholder="ou colle un lien d'image"
+                  onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} />
+                {form.imageUrl && (
+                  <button className="btn line" type="button" onClick={() => setForm({ ...form, imageUrl: "" })}>Retirer</button>
+                )}
+              </div>
+            </div>
             <div className="fld full"><label>Description (facultatif)</label>
               <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             <div className="fld full"><label>Statut</label>
@@ -111,7 +163,7 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
             {error && <div className="err" role="alert">{error}</div>}
             <div className="admin-form-actions">
               <button className="btn line" type="button" onClick={() => setForm(null)}>Annuler</button>
-              <button className="btn fill" type="submit" disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
+              <button className="btn fill" type="submit" disabled={busy || uploading}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
             </div>
           </form>
         </div>
