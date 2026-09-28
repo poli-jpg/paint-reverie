@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useState } from "react";
 import type { GalleryItem } from "@/lib/types";
 
 const PLACEHOLDER = [
@@ -9,7 +10,11 @@ const PLACEHOLDER = [
   { key: "cocktails", w: 280, h: 200 },
 ];
 
+// Nombre de photos affichées au départ, puis ajoutées à chaque clic sur « Voir plus ».
+const STEP = 8;
+
 export default function GalleryPolas({ items }: { items: GalleryItem[] }) {
+  const [count, setCount] = useState(STEP);
   if (items.length === 0) {
     return (
       <div className="polas" aria-hidden="true">
@@ -19,9 +24,12 @@ export default function GalleryPolas({ items }: { items: GalleryItem[] }) {
       </div>
     );
   }
+  const shown = items.slice(0, count);
+  const rest = items.length - shown.length;
   return (
+    <>
     <div className="polas">
-      {items.map((it) => {
+      {shown.map((it) => {
         const land = it.orientation === "landscape";
         const w = land ? 300 : 210, h = land ? 210 : 270;
         return (
@@ -39,5 +47,22 @@ export default function GalleryPolas({ items }: { items: GalleryItem[] }) {
         );
       })}
     </div>
+    {(rest > 0 || count > STEP) && (
+      <div className="gal-more">
+        {rest > 0 ? (
+          <button className="btn line" type="button" onClick={() => setCount((c) => c + STEP)}>
+            Voir plus de la galerie ({rest})
+          </button>
+        ) : (
+          <button className="btn line" type="button" onClick={() => {
+            setCount(STEP);
+            document.getElementById("galerie")?.scrollIntoView({ behavior: "smooth" });
+          }}>
+            Voir moins
+          </button>
+        )}
+      </div>
+    )}
+    </>
   );
 }

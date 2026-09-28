@@ -141,6 +141,7 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
 .gal-up-error span:last-child{color:var(--wine)}
 .gal-up-sending span:last-child{color:var(--soft)}
 
+.gal-more{display:flex;justify-content:center;margin-top:36px}
 /* footer */
 footer{padding:56px 0 40px;text-align:center}
 footer .logo{font-size:44px}

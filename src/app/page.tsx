@@ -16,7 +16,7 @@ const FALLBACK_CONTACT: Contact = {
 export default async function Home() {
   const [w, g, s] = await Promise.all([
     supabase.from("workshops_availability").select("*").gte("starts_at", new Date().toISOString()).order("starts_at"),
-    supabase.from("gallery_items").select("id,media_url,media_type,caption,orientation").eq("published", true).order("sort_order").limit(8),
+    supabase.from("gallery_items").select("id,media_url,media_type,caption,orientation").eq("published", true).order("sort_order").limit(200),
     supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle(),
   ]);
   const workshops = (w.data ?? []) as Workshop[];
