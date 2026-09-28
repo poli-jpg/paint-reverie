@@ -21,13 +21,19 @@ async function uploadImage(file: File): Promise<string> {
 type W = {
   id: string; slug: string; title: string; description: string | null; starts_at: string;
   location: string; price_fcfa: number; capacity: number; image_url: string | null;
+  image_pos_x?: number; image_pos_y?: number; image_zoom?: number; image_size?: "sm" | "md" | "lg";
   status: "draft" | "open" | "closed"; seats_taken: number;
 };
 
 const empty = {
   slug: "", title: "", description: "", startsAt: "", location: "",
   priceFcfa: "", capacity: "8", imageUrl: "", status: "draft" as W["status"],
+  imagePosX: 50, imagePosY: 50, imageZoom: 1, imageSize: "md" as "sm" | "md" | "lg",
 };
+
+const PHOTO_SIZES = [["sm", "Petite"], ["md", "Moyenne"], ["lg", "Grande"]] as const;
+// Même proportion que la photo sur la carte du site, selon la taille choisie.
+const RATIO = { sm: "16 / 9", md: "4 / 3", lg: "1 / 1" } as const;
 
 function toLocalInput(iso: string) {
   const d = new Date(iso);
@@ -43,13 +49,22 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const photoInput = useRef<HTMLInputElement>(null);
+  const draggingPhoto = useRef(false);
+
+  // Cadrage : clic ou glisser sur l'aperçu = point à garder au centre de la photo.
+  function pickPhotoPoint(e: React.PointerEvent<HTMLDivElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = Math.round(Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100)));
+    const y = Math.round(Math.min(100, Math.max(0, ((e.clientY - r.top) / r.height) * 100)));
+    setForm((f) => (f ? { ...f, imagePosX: x, imagePosY: y } : f));
+  }
 
   async function handlePhoto(file?: File) {
     if (!file || !form) return;
     setUploading(true); setError("");
     try {
       const url = await uploadImage(file);
-      setForm((f) => (f ? { ...f, imageUrl: url } : f));
+      setForm((f) => (f ? { ...f, imageUrl: url, imagePosX: 50, imagePosY: 50, imageZoom: 1 } : f));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur d'envoi");
     }
@@ -62,6 +77,8 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
       slug: w.slug, title: w.title, description: w.description ?? "", startsAt: toLocalInput(w.starts_at),
       location: w.location, priceFcfa: String(w.price_fcfa), capacity: String(w.capacity),
       imageUrl: w.image_url ?? "", status: w.status,
+      imagePosX: w.image_pos_x ?? 50, imagePosY: w.image_pos_y ?? 50,
+      imageZoom: Number(w.image_zoom ?? 1), imageSize: w.image_size ?? "md",
     });
     setEditId(w.id); setError("");
   }
@@ -151,6 +168,36 @@ export default function WorkshopsAdmin({ initial }: { initial: W[] }) {
                   <button className="btn line" type="button" onClick={() => setForm({ ...form, imageUrl: "" })}>Retirer</button>
                 )}
               </div>
+              {form.imageUrl && (
+                <div className="ws-frame">
+                  <span className="ws-frame-title">Réglage de la photo sur le site</span>
+                  <div className="ws-frame-preview" style={{ aspectRatio: RATIO[form.imageSize] }}
+                    onPointerDown={(e) => { draggingPhoto.current = true; e.currentTarget.setPointerCapture(e.pointerId); pickPhotoPoint(e); }}
+                    onPointerMove={(e) => { if (draggingPhoto.current) pickPhotoPoint(e); }}
+                    onPointerUp={() => { draggingPhoto.current = false; }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={form.imageUrl} alt="" draggable={false} style={{
+                      objectPosition: `${form.imagePosX}% ${form.imagePosY}%`,
+                      transform: `scale(${form.imageZoom})`, transformOrigin: `${form.imagePosX}% ${form.imagePosY}%`,
+                    }} />
+                    <span className="hero-adjust-dot" style={{ left: `${form.imagePosX}%`, top: `${form.imagePosY}%` }} />
+                  </div>
+                  <p className="ws-frame-help">Cliquez ou glissez sur la photo pour choisir la partie à garder au centre.</p>
+                  <label className="ws-frame-zoom">Zoom
+                    <input type="range" min={1} max={2.5} step={0.05} value={form.imageZoom}
+                      onChange={(e) => setForm({ ...form, imageZoom: Number(e.target.value) })} />
+                  </label>
+                  <div className="hero-adjust-sizes">
+                    <span>Taille de la photo</span>
+                    {PHOTO_SIZES.map(([v, label]) => (
+                      <button key={v} type="button" className={`btn ${form.imageSize === v ? "fill" : "line"}`}
+                        onClick={() => setForm({ ...form, imageSize: v })}>{label}</button>
+                    ))}
+                    <button type="button" className="btn line"
+                      onClick={() => setForm({ ...form, imagePosX: 50, imagePosY: 50, imageZoom: 1 })}>Recentrer</button>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="fld full"><label>Description (facultatif)</label>
               <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>

@@ -38,6 +38,10 @@ export const workshopSchema = z.object({
   priceFcfa: z.coerce.number().int().min(0),
   capacity: z.coerce.number().int().min(1).max(500),
   imageUrl: z.string().trim().max(1000).optional().default(""),
+  imagePosX: z.coerce.number().min(0).max(100).optional().default(50),
+  imagePosY: z.coerce.number().min(0).max(100).optional().default(50),
+  imageZoom: z.coerce.number().min(1).max(2.5).optional().default(1),
+  imageSize: z.enum(["sm", "md", "lg"]).optional().default("md"),
   status: z.enum(["draft", "open", "closed"]),
 });
 

@@ -19,6 +19,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     slug, title: d.title, description: d.description || null,
     starts_at: startsAt.toISOString(), location: d.location,
     price_fcfa: d.priceFcfa, capacity: d.capacity, image_url: d.imageUrl || null, status: d.status,
+    image_pos_x: Math.round(d.imagePosX), image_pos_y: Math.round(d.imagePosY), image_zoom: d.imageZoom, image_size: d.imageSize,
   }).eq("id", id);
   if (error) {
     const msg = error.code === "23505" ? "Cet identifiant est déjà utilisé par un autre atelier." : error.message;

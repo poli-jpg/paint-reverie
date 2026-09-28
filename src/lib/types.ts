@@ -2,6 +2,7 @@ export type Workshop = {
   id: string; slug: string; title: string; description: string | null;
   starts_at: string; location: string; price_fcfa: number; capacity: number;
   image_url: string | null; status: "open" | "closed"; seats_left: number;
+  image_pos_x?: number; image_pos_y?: number; image_zoom?: number; image_size?: "sm" | "md" | "lg";
 };
 export type GalleryItem = {
   id: string; media_url: string; media_type: "image" | "video";

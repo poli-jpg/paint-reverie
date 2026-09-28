@@ -62,10 +62,16 @@ export default function Workshops({ workshops, whatsapp, instagram }: { workshop
           const bookable = w.status === "open" && w.seats_left > 0;
           return (
             <article className="card" key={w.id}>
-              <div className="ph">
+              <div className={`ph ph-${w.image_size ?? "md"}`}>
                 {w.image_url
                   ? <Image src={w.image_url} alt={w.title} fill sizes="(max-width:860px) 100vw, 360px"
-                      unoptimized={!w.image_url.includes(".supabase.co/")} style={{ objectFit: "cover" }} />
+                      unoptimized={!w.image_url.includes(".supabase.co/")}
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: `${w.image_pos_x ?? 50}% ${w.image_pos_y ?? 50}%`,
+                        transform: `scale(${w.image_zoom ?? 1})`,
+                        transformOrigin: `${w.image_pos_x ?? 50}% ${w.image_pos_y ?? 50}%`,
+                      }} />
                   : "Photo de l'atelier"}
               </div>
               <div className="in">

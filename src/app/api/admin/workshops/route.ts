@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     title: d.title, description: d.description || null,
     starts_at: startsAt.toISOString(), location: d.location,
     price_fcfa: d.priceFcfa, capacity: d.capacity, image_url: d.imageUrl || null, status: d.status,
+    image_pos_x: Math.round(d.imagePosX), image_pos_y: Math.round(d.imagePosY), image_zoom: d.imageZoom, image_size: d.imageSize,
   };
   let { error } = await supabaseAdmin.from("workshops").insert({ ...row, slug });
   // Identifiant déjà pris (même titre) : on ajoute un suffixe au lieu de bloquer.
