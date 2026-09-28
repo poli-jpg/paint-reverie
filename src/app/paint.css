@@ -227,9 +227,10 @@ dialog .sub{color:var(--soft);font-size:15px;margin:4px 0 20px}
  nav li a{display:block;padding:14px 0;border-bottom:1px solid rgba(201,154,160,.3);font:500 22px var(--serif)}
  .hero{padding:36px 0 56px}
  .hero .wrap,.concept .wrap,.prive .wrap{grid-template-columns:1fr;gap:36px}
- .hero-art{height:320px;order:-1}
- .hero-sm .hero-art{height:260px}
- .hero-lg .hero-art{height:420px}
+ /* Mobile : cadre presque carré, comme sur ordinateur, pour garder le même cadrage */
+ .hero-art{height:auto;aspect-ratio:1/1;order:-1}
+ .hero-sm .hero-art{width:80%;margin:0 auto}
+ .hero-lg .hero-art{aspect-ratio:5/6}
  .cards{grid-template-columns:1fr}
  .btn{width:100%;text-align:center}
  .concept,.ateliers,.prive,.galerie,.about{padding:64px 0}
