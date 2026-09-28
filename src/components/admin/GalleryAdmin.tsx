@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase-browser";
+import type { HeroSettings } from "@/lib/types";
 
 type Orientation = "portrait" | "landscape";
 type Upload = { name: string; status: "wait" | "sending" | "done" | "error"; message?: string };
@@ -34,16 +35,37 @@ type G = {
 
 const empty = { mediaUrl: "", mediaType: "image" as "image" | "video", caption: "", category: "", orientation: "portrait" as "portrait" | "landscape", sortOrder: "0" };
 
-export default function GalleryAdmin({ initial, heroUrl }: { initial: G[]; heroUrl: string | null }) {
+const SIZES = [["sm", "Petit"], ["md", "Moyen"], ["lg", "Grand"]] as const;
+
+export default function GalleryAdmin({ initial, hero: initialHero }: { initial: G[]; hero: HeroSettings | null }) {
   const [items, setItems] = useState(initial);
-  const [hero, setHero] = useState(heroUrl);
+  const [heroCfg, setHeroCfg] = useState<HeroSettings | null>(initialHero);
+  const hero = heroCfg?.image_url ?? null;
+  const [savingHero, setSavingHero] = useState<"" | "saving" | "saved">("");
+  const dragging = useRef(false);
+
+  async function saveHero(patch: Record<string, unknown>) {
+    setSavingHero("saving");
+    const r = await fetch("/api/admin/hero", {
+      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(patch),
+    });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) { setError(body.error || "Impossible d'enregistrer la photo d'accueil."); setSavingHero(""); return; }
+    setHeroCfg(patch.imageUrl === null ? null : body.hero);
+    setSavingHero("saved");
+  }
 
   async function setAsHero(url: string | null) {
-    const r = await fetch("/api/admin/hero", {
-      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ imageUrl: url }),
-    });
-    if (r.ok) setHero(url);
-    else setError("Impossible de changer la photo d'accueil.");
+    await saveHero({ imageUrl: url });
+  }
+
+  // Cadrage : on clique (ou glisse) sur l'aperçu pour choisir le point central.
+  function pickPoint(e: React.PointerEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = Math.round(Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100)));
+    const y = Math.round(Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100)));
+    setHeroCfg((h) => (h ? { ...h, pos_x: x, pos_y: y } : h));
+    setSavingHero("");
   }
   const [form, setForm] = useState<typeof empty | null>(null);
   const [error, setError] = useState("");
@@ -157,6 +179,50 @@ export default function GalleryAdmin({ initial, heroUrl }: { initial: G[]; heroU
             </li>
           ))}
         </ul>
+      )}
+
+      {heroCfg && (
+        <section className="hero-adjust">
+          <h2>Photo d&apos;accueil : cadrage et taille</h2>
+          <div className="hero-adjust-body">
+            <div className="hero-adjust-preview"
+              onPointerDown={(e) => { dragging.current = true; e.currentTarget.setPointerCapture(e.pointerId); pickPoint(e); }}
+              onPointerMove={(e) => { if (dragging.current) pickPoint(e); }}
+              onPointerUp={() => { dragging.current = false; }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={heroCfg.image_url} alt="" draggable={false} style={{
+                objectPosition: `${heroCfg.pos_x ?? 50}% ${heroCfg.pos_y ?? 50}%`,
+                transform: `scale(${heroCfg.zoom ?? 1})`,
+                transformOrigin: `${heroCfg.pos_x ?? 50}% ${heroCfg.pos_y ?? 50}%`,
+              }} />
+              <span className="hero-adjust-dot" style={{ left: `${heroCfg.pos_x ?? 50}%`, top: `${heroCfg.pos_y ?? 50}%` }} />
+            </div>
+            <div className="hero-adjust-controls">
+              <p className="admin-muted">Cliquez ou glissez sur la photo pour choisir la partie à garder au centre du cadre.</p>
+              <label>Zoom
+                <input type="range" min={1} max={2.5} step={0.05} value={heroCfg.zoom ?? 1}
+                  onChange={(e) => { setHeroCfg({ ...heroCfg, zoom: Number(e.target.value) }); setSavingHero(""); }} />
+              </label>
+              <div className="hero-adjust-sizes">
+                <span>Taille du cadre</span>
+                {SIZES.map(([v, label]) => (
+                  <button key={v} type="button"
+                    className={`btn ${(heroCfg.size ?? "md") === v ? "fill" : "line"}`}
+                    onClick={() => { setHeroCfg({ ...heroCfg, size: v }); setSavingHero(""); }}>{label}</button>
+                ))}
+              </div>
+              <div className="admin-row-actions">
+                <button className="btn fill" type="button" disabled={savingHero === "saving"}
+                  onClick={() => saveHero({ posX: heroCfg.pos_x ?? 50, posY: heroCfg.pos_y ?? 50, zoom: heroCfg.zoom ?? 1, size: heroCfg.size ?? "md" })}>
+                  {savingHero === "saving" ? "Enregistrement…" : "Enregistrer le réglage"}
+                </button>
+                <button className="btn line" type="button"
+                  onClick={() => { setHeroCfg({ ...heroCfg, pos_x: 50, pos_y: 50, zoom: 1 }); setSavingHero(""); }}>Recentrer</button>
+                {savingHero === "saved" && <span className="hero-adjust-ok">Enregistré ✓ — visible sur l&apos;accueil</span>}
+              </div>
+            </div>
+          </div>
+        </section>
       )}
 
       <div className="admin-gallery-grid">

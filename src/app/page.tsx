@@ -5,7 +5,7 @@ import PrivateForm from "@/components/PrivateForm";
 import GalleryPolas from "@/components/GalleryPolas";
 import ContactSection from "@/components/ContactSection";
 import { supabase } from "@/lib/supabase";
-import type { Contact, GalleryItem, Workshop } from "@/lib/types";
+import type { Contact, GalleryItem, HeroSettings, Workshop } from "@/lib/types";
 
 export const revalidate = 60; // les ateliers et places restantes se rafraîchissent chaque minute
 
@@ -23,14 +23,16 @@ export default async function Home() {
   const workshops = (w.data ?? []) as Workshop[];
   const gallery = (g.data ?? []) as GalleryItem[];
   const contact: Contact = { ...FALLBACK_CONTACT, ...(s.data?.value ?? {}) };
-  const heroImage: string | undefined = hr.data?.value?.image_url;
+  const hero = (hr.data?.value ?? null) as HeroSettings | null;
+  const heroImage = hero?.image_url;
+  const heroPos = `${hero?.pos_x ?? 50}% ${hero?.pos_y ?? 50}%`;
   const waDigits = contact.whatsapp.replace(/\D/g, "");
 
   return (
     <>
       <Header />
       <main id="top">
-        <section className="hero"><div className="wrap">
+        <section className={`hero hero-${hero?.size ?? "md"}`}><div className="wrap">
           <div className="load">
             <h1>The Paint Reverie</h1>
             <div className="by">by Fatima</div>
@@ -45,7 +47,8 @@ export default async function Home() {
             <div className="ribbon"></div>
             {heroImage ? (
               <div className="canvas has-photo">
-                <Image src={heroImage} alt="" fill priority sizes="(max-width:860px) 90vw, 460px" style={{ objectFit: "cover" }} />
+                <Image src={heroImage} alt="" fill priority sizes="(max-width:860px) 90vw, 560px"
+                  style={{ objectFit: "cover", objectPosition: heroPos, transform: `scale(${hero?.zoom ?? 1})`, transformOrigin: heroPos }} />
               </div>
             ) : (
               <div className="canvas"><small>Photo d&apos;une toile de l&apos;atelier</small></div>

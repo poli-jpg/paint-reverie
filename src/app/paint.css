@@ -35,6 +35,10 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
 .hero p.lead{font:500 22px/1.5 var(--serif);color:var(--soft);margin-bottom:34px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px}
 .hero-art{position:relative;height:440px}
+.hero-sm .hero-art{height:360px}
+.hero-sm .wrap{grid-template-columns:1.3fr .7fr}
+.hero-lg .hero-art{height:560px}
+.hero-lg .wrap{grid-template-columns:1fr 1fr}
 .canvas{position:absolute;inset:18px 30px 18px 10px;background:var(--rose);border:10px solid #fff;box-shadow:0 12px 28px rgba(74,51,56,.14);transform:rotate(2.5deg);display:grid;place-items:center}
 .canvas::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 70%,rgba(169,184,155,.55) 0 22%,transparent 23%),radial-gradient(circle at 72% 32%,rgba(201,154,160,.85) 0 26%,transparent 27%)}
 .canvas.has-photo{overflow:hidden}
@@ -169,6 +173,19 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
 .legal p,.legal li{max-width:none;color:var(--ink)}
 .legal ul{padding-left:20px;display:grid;gap:6px;margin:8px 0}
 .legal a{text-decoration:underline}
+/* admin : réglage photo d'accueil */
+.hero-adjust{background:#fff;border:1px solid rgba(201,154,160,.35);padding:20px;margin:6px 0 22px}
+.hero-adjust h2{font:500 22px var(--serif);margin-bottom:14px}
+.hero-adjust-body{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.hero-adjust-preview{position:relative;width:300px;height:300px;overflow:hidden;border:8px solid #fff;box-shadow:0 8px 20px rgba(74,51,56,.18);cursor:crosshair;touch-action:none;background:var(--rose)}
+.hero-adjust-preview img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;pointer-events:none}
+.hero-adjust-dot{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;border:3px solid #fff;background:var(--wine);box-shadow:0 0 0 2px rgba(0,0,0,.25);pointer-events:none}
+.hero-adjust-controls{display:flex;flex-direction:column;gap:14px}
+.hero-adjust-controls label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--soft);max-width:320px}
+.hero-adjust-sizes{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--soft)}
+.hero-adjust-sizes .btn,.hero-adjust-controls .admin-row-actions .btn{padding:8px 14px;font-size:13px;min-height:auto}
+.hero-adjust-ok{align-self:center;font-size:14px;color:#3f5030}
+@media(max-width:700px){.hero-adjust-body{grid-template-columns:1fr}.hero-adjust-preview{width:100%;max-width:300px}}
 /* footer */
 footer{padding:56px 0 40px;text-align:center}
 footer .logo{font-size:44px}
@@ -211,6 +228,8 @@ dialog .sub{color:var(--soft);font-size:15px;margin:4px 0 20px}
  .hero{padding:36px 0 56px}
  .hero .wrap,.concept .wrap,.prive .wrap{grid-template-columns:1fr;gap:36px}
  .hero-art{height:320px;order:-1}
+ .hero-sm .hero-art{height:260px}
+ .hero-lg .hero-art{height:420px}
  .cards{grid-template-columns:1fr}
  .btn{width:100%;text-align:center}
  .concept,.ateliers,.prive,.galerie,.about{padding:64px 0}

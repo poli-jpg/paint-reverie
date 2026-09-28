@@ -26,3 +26,12 @@ export function hourLabel(iso: string) {
   const [h, m] = new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Dakar" }).split(":");
   return `${Number(h)}h${m === "00" ? "" : m}`;
 }
+
+// Réglages de la photo d'accueil (enregistrés dans site_settings, clé "hero").
+export type HeroSettings = {
+  image_url: string;
+  pos_x?: number;   // 0–100 : partie visible horizontalement
+  pos_y?: number;   // 0–100 : partie visible verticalement
+  zoom?: number;    // 1 = normal, jusqu'à 2.5
+  size?: "sm" | "md" | "lg"; // taille du cadre
+};
