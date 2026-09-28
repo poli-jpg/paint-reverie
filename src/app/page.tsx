@@ -14,14 +14,16 @@ const FALLBACK_CONTACT: Contact = {
 };
 
 export default async function Home() {
-  const [w, g, s] = await Promise.all([
+  const [w, g, s, hr] = await Promise.all([
     supabase.from("workshops_availability").select("*").gte("starts_at", new Date().toISOString()).order("starts_at"),
     supabase.from("gallery_items").select("id,media_url,media_type,caption,orientation").eq("published", true).order("sort_order").limit(200),
     supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle(),
+    supabase.from("site_settings").select("value").eq("key", "hero").maybeSingle(),
   ]);
   const workshops = (w.data ?? []) as Workshop[];
   const gallery = (g.data ?? []) as GalleryItem[];
   const contact: Contact = { ...FALLBACK_CONTACT, ...(s.data?.value ?? {}) };
+  const heroImage: string | undefined = hr.data?.value?.image_url;
   const waDigits = contact.whatsapp.replace(/\D/g, "");
 
   return (
@@ -41,7 +43,13 @@ export default async function Home() {
           </div>
           <div className="hero-art" aria-hidden="true">
             <div className="ribbon"></div>
-            <div className="canvas"><small>Photo d&apos;une toile de l&apos;atelier</small></div>
+            {heroImage ? (
+              <div className="canvas has-photo">
+                <Image src={heroImage} alt="" fill priority sizes="(max-width:860px) 90vw, 460px" style={{ objectFit: "cover" }} />
+              </div>
+            ) : (
+              <div className="canvas"><small>Photo d&apos;une toile de l&apos;atelier</small></div>
+            )}
             <div className="tag">Paint Cam</div>
           </div>
         </div></section>

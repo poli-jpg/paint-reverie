@@ -34,8 +34,17 @@ type G = {
 
 const empty = { mediaUrl: "", mediaType: "image" as "image" | "video", caption: "", category: "", orientation: "portrait" as "portrait" | "landscape", sortOrder: "0" };
 
-export default function GalleryAdmin({ initial }: { initial: G[] }) {
+export default function GalleryAdmin({ initial, heroUrl }: { initial: G[]; heroUrl: string | null }) {
   const [items, setItems] = useState(initial);
+  const [hero, setHero] = useState(heroUrl);
+
+  async function setAsHero(url: string | null) {
+    const r = await fetch("/api/admin/hero", {
+      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ imageUrl: url }),
+    });
+    if (r.ok) setHero(url);
+    else setError("Impossible de changer la photo d'accueil.");
+  }
   const [form, setForm] = useState<typeof empty | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -158,6 +167,9 @@ export default function GalleryAdmin({ initial }: { initial: G[] }) {
               : <img src={g.media_url} alt={g.caption ?? ""} />}
             <div className="admin-gallery-meta">
               <span className={`badge ${g.published ? "badge-open" : "badge-draft"}`}>{g.published ? "publié" : "masqué"}</span>
+              {g.media_type === "image" && (hero === g.media_url
+                ? <button className="btn fill" type="button" onClick={() => setAsHero(null)}>★ Photo d&apos;accueil (retirer)</button>
+                : <button className="btn line" type="button" onClick={() => setAsHero(g.media_url)}>Mettre en photo d&apos;accueil</button>)}
               <div className="admin-row-actions">
                 <button className="btn line" type="button" onClick={() => togglePublished(g)}>{g.published ? "Masquer" : "Publier"}</button>
                 <button className="btn line danger" type="button" onClick={() => remove(g.id)}>Supprimer</button>

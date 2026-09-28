@@ -5,5 +5,6 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminGalleryPage() {
   const { data } = await supabaseAdmin.from("gallery_items").select("*").order("sort_order");
-  return <GalleryAdmin initial={data ?? []} />;
+  const { data: hero } = await supabaseAdmin.from("site_settings").select("value").eq("key", "hero").maybeSingle();
+  return <GalleryAdmin initial={data ?? []} heroUrl={hero?.value?.image_url ?? null} />;
 }
