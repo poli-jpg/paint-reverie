@@ -59,7 +59,7 @@ export default async function Home() {
           <div>
             <p>The Paint Reverie, c&apos;est un atelier de peinture pensé pour créer, partager et simplement passer un bon moment.</p>
             <p>Une toile, quelques couleurs, de bonnes vibes et des souvenirs à créer. Pas besoin d&apos;être artiste : on vient profiter, et on repart avec sa propre création.</p>
-            <div className="list"><span className="chip">Matériel fourni</span><span className="chip">Cocktail sur place</span><span className="chip">Séance photo Paint Cam</span><span className="chip">Repartez avec votre toile</span></div>
+            <div className="list"><span className="chip">Matériel fourni</span><span className="chip">Cocktail offert</span><span className="chip">Séance photo Paint Cam</span><span className="chip">Repartez avec votre toile</span></div>
           </div>
         </div></section>
 
