@@ -125,6 +125,22 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
   .contact-ico{width:40px;height:40px}
 }
 
+/* admin galerie : envoi direct */
+.gal-drop{margin:14px 0 12px;border:2px dashed var(--dusty);border-radius:14px;background:#fff;padding:30px 20px;text-align:center;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:background .2s,border-color .2s}
+.gal-drop:hover{background:var(--cream);border-color:var(--wine)}
+.gal-drop strong{font:500 20px var(--serif);color:var(--wine)}
+.gal-drop span{font-size:14px;color:var(--soft)}
+.gal-options{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.gal-options label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--soft);flex:1;min-width:240px;max-width:420px}
+.gal-options input{font:inherit;color:var(--ink);background:#fff;border:1px solid rgba(201,154,160,.7);border-radius:10px;padding:10px 12px}
+.gal-link{background:none;border:0;color:var(--wine);text-decoration:underline;cursor:pointer;font:inherit;font-size:14px;padding:6px 0}
+.gal-uploads{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px}
+.gal-up{display:flex;justify-content:space-between;gap:12px;background:#fff;border:1px solid rgba(201,154,160,.35);padding:8px 12px;font-size:14px}
+.gal-up span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal-up-done span:last-child{color:#3f5030}
+.gal-up-error span:last-child{color:var(--wine)}
+.gal-up-sending span:last-child{color:var(--soft)}
+
 /* footer */
 footer{padding:56px 0 40px;text-align:center}
 footer .logo{font-size:44px}
