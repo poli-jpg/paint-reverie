@@ -6,7 +6,7 @@ import { sendBookingEmails } from "@/lib/email";
 export async function POST(req: Request) {
   const parsed = bookingSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ error: "Vérifie les champs du formulaire." }, { status: 400 });
+    return NextResponse.json({ error: "Vérifiez les champs du formulaire." }, { status: 400 });
   }
   const d = parsed.data;
   if (d.website) return NextResponse.json({ ok: true }); // bot : on fait semblant
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     if (msg.includes("workshop_closed") || msg.includes("workshop_past"))
       return NextResponse.json({ error: "Les réservations sont fermées pour cet atelier." }, { status: 409 });
     console.error(error);
-    return NextResponse.json({ error: "Une erreur est survenue, réessaie." }, { status: 500 });
+    return NextResponse.json({ error: "Une erreur est survenue, veuillez réessayer." }, { status: 500 });
   }
 
   const { data: w } = await supabaseAdmin

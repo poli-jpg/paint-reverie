@@ -64,8 +64,8 @@ export default async function Home() {
         </div></section>
 
         <section className="ateliers" id="ateliers"><div className="wrap">
-          <div className="head"><h2>Nos prochains ateliers</h2><p>Réservez votre place en ligne.</p></div>
-          <Workshops workshops={workshops} whatsapp={contact.whatsapp} />
+          <div className="head"><h2>Nos prochains ateliers</h2><p>{workshops.length > 0 ? "Réservez votre place en ligne." : "Aucun atelier programmé pour le moment."}</p></div>
+          <Workshops workshops={workshops} whatsapp={contact.whatsapp} instagram={contact.instagram} />
         </div></section>
 
         <section className="prive" id="prives"><div className="wrap">
@@ -103,7 +103,7 @@ export default async function Home() {
         <div className="sig" style={{ margin: 0 }}>PAINT ✦ CREATE ✦ DREAM</div>
         <nav><ul>
           <li><a href="#top">Accueil</a></li><li><a href="#ateliers">Ateliers</a></li><li><a href="#prives">Ateliers privés</a></li>
-          <li><a href="#galerie">Galerie</a></li><li><a href="#contact">Contact</a></li>
+          <li><a href="#galerie">Galerie</a></li><li><a href="#contact">Contact</a></li><li><a href="/confidentialite">Confidentialité</a></li>
         </ul></nav>
         <div className="soc">
           <a href={`https://wa.me/${waDigits}`}>WhatsApp</a>

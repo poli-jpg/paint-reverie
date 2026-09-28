@@ -6,7 +6,7 @@ import { sendPrivateRequestEmails } from "@/lib/email";
 export async function POST(req: Request) {
   const parsed = privateRequestSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return NextResponse.json({ error: "Vérifie les champs du formulaire." }, { status: 400 });
+    return NextResponse.json({ error: "Vérifiez les champs du formulaire." }, { status: 400 });
   }
   const d = parsed.data;
   if (d.website) return NextResponse.json({ ok: true });
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   });
   if (error) {
     console.error(error);
-    return NextResponse.json({ error: "Une erreur est survenue, réessaie." }, { status: 500 });
+    return NextResponse.json({ error: "Une erreur est survenue, veuillez réessayer." }, { status: 500 });
   }
   await sendPrivateRequestEmails(d);
   return NextResponse.json({ ok: true });

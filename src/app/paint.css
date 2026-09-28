@@ -154,6 +154,21 @@ h1{font:clamp(64px,10vw,124px)/.95 var(--script);color:var(--ink);font-weight:40
 .ws-photo-row input{flex:1;min-height:40px;padding:8px 12px;font-size:14px}
 .ws-photo-row .btn{padding:8px 14px;font-size:13px;min-height:auto}
 .gal-more{display:flex;justify-content:center;margin-top:36px}
+/* bientôt : atelier vide */
+.soon-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.soon-actions .btn{text-align:center}
+.card.soon-empty{border-style:solid;border-color:var(--dusty);background:#fff}
+.legal-note{font-size:13px;color:var(--soft);margin:0}
+.legal-note a{text-decoration:underline}
+/* page confidentialité */
+.legal{max-width:760px;margin:0 auto;padding:56px 24px 72px}
+.legal .back{font-size:15px;color:var(--wine);text-decoration:underline}
+.legal h1{font:500 clamp(34px,5vw,48px)/1.1 var(--serif);margin:24px 0 6px}
+.legal .upd{color:var(--soft);font-size:14px;margin-bottom:28px}
+.legal h2{font:500 26px var(--serif);color:var(--wine);margin:32px 0 10px}
+.legal p,.legal li{max-width:none;color:var(--ink)}
+.legal ul{padding-left:20px;display:grid;gap:6px;margin:8px 0}
+.legal a{text-decoration:underline}
 /* footer */
 footer{padding:56px 0 40px;text-align:center}
 footer .logo{font-size:44px}

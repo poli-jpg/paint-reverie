@@ -35,12 +35,12 @@ export async function sendBookingEmails(b: {
   await Promise.all([
     safeSend({
       from: FROM, to: b.email,
-      subject: `Ta place est réservée : ${b.title}`,
+      subject: `Votre réservation : ${b.title}`,
       html: shell(`
-        <p>Coucou ${esc(b.firstName)},</p>
-        <p>Ta réservation est bien enregistrée pour <b>${esc(b.title)}</b>.</p>
+        <p>Bonjour ${esc(b.firstName)},</p>
+        <p>Votre réservation est bien enregistrée pour <b>${esc(b.title)}</b>.</p>
         <p>${esc(date)}<br>${esc(b.location)}<br>${b.seats} place(s), soit ${total} FCFA</p>
-        <p>Fatima t'écrit sur WhatsApp pour le paiement de l'acompte (${(DEPOSIT_FCFA * b.seats).toLocaleString("fr-FR")} FCFA). Ta place est confirmée une fois celui-ci reçu.</p>`),
+        <p>Fatima vous contacte sur WhatsApp pour le paiement de l'acompte (${(DEPOSIT_FCFA * b.seats).toLocaleString("fr-FR")} FCFA). Votre place est confirmée dès sa réception.</p>`),
     }),
     safeSend({
       from: FROM, to: NOTIFY,
@@ -59,9 +59,9 @@ export async function sendPrivateRequestEmails(r: {
   await Promise.all([
     safeSend({
       from: FROM, to: r.email,
-      subject: "On a bien reçu ta demande d'atelier",
-      html: shell(`<p>Coucou ${esc(r.firstName)},</p>
-        <p>Merci pour ta demande d'atelier (${esc(r.eventType)}). Fatima te répond très vite sur WhatsApp ou par e-mail.</p>`),
+      subject: "Nous avons bien reçu votre demande d'atelier",
+      html: shell(`<p>Bonjour ${esc(r.firstName)},</p>
+        <p>Merci pour votre demande d'atelier (${esc(r.eventType)}). Fatima vous répond très vite sur WhatsApp ou par e-mail.</p>`),
     }),
     safeSend({
       from: FROM, to: NOTIFY, replyTo: r.email,

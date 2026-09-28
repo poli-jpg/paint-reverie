@@ -51,6 +51,9 @@ export default function PrivateForm() {
       <div className="fld full"><label htmlFor="p-lieu">Lieu de l&apos;événement</label><input id="p-lieu" name="location" /></div>
       <div className="fld full"><label htmlFor="p-msg">Message / détails du projet</label><textarea id="p-msg" name="message" /></div>
       <input className="hp" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      <p className="fld full legal-note">
+        Vos coordonnées servent uniquement à répondre à votre demande. <a href="/confidentialite" target="_blank">Politique de confidentialité</a>
+      </p>
       {error && <div className="err" role="alert">{error}</div>}
       <button className="btn fill" type="submit" disabled={state === "sending"}>{state === "sending" ? "Envoi…" : "Envoyer ma demande"}</button>
     </form>

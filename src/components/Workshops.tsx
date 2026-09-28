@@ -8,7 +8,8 @@ const fmtDate = (iso: string) =>
 const fmtTime = (iso: string) =>
   new Date(iso).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Dakar" }).replace(":", "h");
 
-export default function Workshops({ workshops, whatsapp }: { workshops: Workshop[]; whatsapp: string }) {
+export default function Workshops({ workshops, whatsapp, instagram }: { workshops: Workshop[]; whatsapp: string; instagram: string }) {
+  const notifyUrl = `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Bonjour Fatima 🎨 Je voudrais être prévenue de la date du prochain atelier The Paint Reverie.")}`;
   const dlg = useRef<HTMLDialogElement>(null);
   const [sel, setSel] = useState<Workshop | null>(null);
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
@@ -80,9 +81,24 @@ export default function Workshops({ workshops, whatsapp }: { workshops: Workshop
             </article>
           );
         })}
-        <article className="card soon">
+        <article className={`card soon${workshops.length === 0 ? " soon-empty" : ""}`}>
           <div className="script">Bientôt</div>
-          <p className="meta" style={{ margin: "8px auto 0" }}>D&apos;autres dates arrivent. Suivez-nous sur Instagram.</p>
+          {workshops.length === 0 ? (
+            <>
+              <p className="meta" style={{ margin: "8px auto 0" }}>
+                Le prochain atelier se prépare. Laissez-nous votre numéro sur WhatsApp : vous serez prévenue dès l&apos;ouverture des réservations.
+              </p>
+              <div className="soon-actions">
+                <a className="btn fill" href={notifyUrl} target="_blank" rel="noopener noreferrer">Être prévenue sur WhatsApp</a>
+                <a className="btn line" href="#demande">Organiser un atelier privé</a>
+              </div>
+            </>
+          ) : (
+            <p className="meta" style={{ margin: "8px auto 0" }}>
+              D&apos;autres dates arrivent. Suivez-nous sur{" "}
+              <a href={`https://instagram.com/${instagram}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>Instagram</a>.
+            </p>
+          )}
         </article>
       </div>
 
@@ -107,6 +123,9 @@ export default function Workshops({ workshops, whatsapp }: { workshops: Workshop
                 <p className="fld full meta" style={{ margin: 0 }}>
                   Un acompte de {DEPOSIT_FCFA.toLocaleString("fr-FR")} FCFA par place est demandé pour valider la réservation.
                   Fatima vous contacte sur WhatsApp pour le paiement.
+                </p>
+                <p className="fld full meta legal-note">
+                  Vos coordonnées servent uniquement à gérer votre réservation. <a href="/confidentialite" target="_blank">Politique de confidentialité</a>
                 </p>
                 {error && <div className="err" role="alert">{error}</div>}
                 <button className="btn fill" type="submit" disabled={state === "sending"}>{state === "sending" ? "Envoi…" : "Réserver"}</button>

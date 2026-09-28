@@ -2,9 +2,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./paint.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://paint-reverie.vercel.app";
+const TITLE = "The Paint Reverie by Fatima";
+const DESCRIPTION = "Atelier de peinture créatif et mobile au Sénégal. Réservez votre place ou organisez votre atelier privé.";
+
 export const metadata: Metadata = {
-  title: "The Paint Reverie by Fatima",
-  description: "Atelier de peinture créatif et mobile au Sénégal. Réservez votre place ou organisez votre atelier privé.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: "The Paint Reverie",
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
