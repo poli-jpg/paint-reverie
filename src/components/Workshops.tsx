@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { DEPOSIT_FCFA, type Workshop } from "@/lib/types";
+import { DEPOSIT_FCFA, dayLabel, fcfa, hourLabel, type Workshop } from "@/lib/types";
 
 const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "Africa/Dakar" });
@@ -36,12 +36,16 @@ export default function Workshops({ workshops, whatsapp, instagram }: { workshop
       if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || "Erreur");
       const seats = Number(f.seats) || 1;
       const msg = [
-        "Bonjour Fatima, je viens de réserver sur le site 🎨",
-        `Atelier : ${sel.title}`,
-        `Date : ${fmtDate(sel.starts_at)} à ${fmtTime(sel.starts_at)}`,
-        `Nom : ${f.firstName} ${f.lastName}`,
-        `Places : ${seats}`,
-        `Acompte : ${(DEPOSIT_FCFA * seats).toLocaleString("fr-FR")} FCFA`,
+        "Bonjour Fatima, je viens de réserver sur le site",
+        "",
+        `Atelier: ${sel.title}`,
+        `Date: ${dayLabel(sel.starts_at)}`,
+        `Heure: ${hourLabel(sel.starts_at)}`,
+        `Nom: ${f.firstName} ${f.lastName}`,
+        `Place(s): ${seats}`,
+        `Prix total: ${fcfa(sel.price_fcfa * seats)}`,
+        `Acompte: ${fcfa(DEPOSIT_FCFA * seats)}`,
+        "",
         "Je souhaite confirmer ma réservation.",
       ].join("\n");
       setWaUrl(`https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`);

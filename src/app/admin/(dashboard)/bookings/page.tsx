@@ -9,12 +9,13 @@ export default async function AdminBookingsPage() {
     .select("id, first_name, last_name, phone, email, seats, notes, status, payment_status, created_at, workshop_id")
     .order("created_at", { ascending: false });
   if (error) console.error("[admin] réservations :", error.message);
-  const { data: workshops } = await supabaseAdmin.from("workshops").select("id, title, starts_at");
+  const { data: workshops } = await supabaseAdmin.from("workshops").select("id, title, starts_at, price_fcfa");
   const info = new Map((workshops ?? []).map((w) => [w.id, w]));
   const initial = (bookings ?? []).map((b) => ({
     ...b,
     workshop_title: info.get(b.workshop_id)?.title ?? "Atelier supprimé",
     workshop_date: info.get(b.workshop_id)?.starts_at ?? "",
+    workshop_price: info.get(b.workshop_id)?.price_fcfa ?? 0,
   }));
   return <BookingsAdmin initial={initial} />;
 }
